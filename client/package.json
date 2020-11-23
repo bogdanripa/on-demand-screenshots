@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "os": "^0.1.1",
+    "resize-img": "^2.0.0",
     "screenshot-desktop": "^1.12.3",
     "socket.io-client": "^3.0.3"
   }

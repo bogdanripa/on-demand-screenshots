@@ -4,6 +4,7 @@ const socket = io("wss://YOUR-APP-DETAILS.appspot.com/", {
   reconnectionDelayMax: 1000
 });
 const os = require('os');
+const resizeImg = require('resize-img');
 
 const id = os.hostname().replace(/[^a-z0-9]/ig, '-');
 console.log("Init: " + id);
@@ -37,8 +38,10 @@ socket.on('get', (data) => {
 	if (data == id) {
 		console.log("Screenshot requested");
 		screenshot().then((img) => {
-			var base64data = Buffer.from(img).toString('base64');
-			socket.emit('ss', data + ' <img src="data:image/png;base64,' + base64data + '" width="100%"/>');
+			resizeImg(img, {width: 1024}).then((img) => {
+				var base64data = Buffer.from(img).toString('base64');
+				socket.emit('ss', data + ' <img src="data:image/png;base64,' + base64data + '" width="100%"/>');
+			});
 		}).catch((error) => {
 			console.log("Screenshot error: " + error);
 		});
