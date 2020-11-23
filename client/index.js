@@ -9,6 +9,7 @@ const resizeImg = require('resize-img');
 const id = os.hostname().replace(/[^a-z0-9]/ig, '-');
 console.log("Init: " + id);
 
+var sHbTo = 0;
 var hbTo = 0;
 function heartbeat() {
 	socket.emit('heartbeat', id);
@@ -18,19 +19,19 @@ socket.on('connect', () => {
 	console.log("Connected");
 
 	heartbeat();
-	if (hbTo) clearTimeout(hbTo);
-	setTimeout(heartbeat, 60 * 1000);
+	if (hbTo) clearInterval(hbTo);
+	setInterval(heartbeat, 60 * 1000);
 });
 
 socket.on('disconnect', (reason) => {
 	console.log("Disconnected: " + reason);
-	if (hbTo) clearTimeout(hbTo);
+	if (hbTo) clearInterval(hbTo);
 	socket.connect();
 });
 
 socket.on('connect_error', (error) => {
 	console.log("Error: " + error);
-	if (hbTo) clearTimeout(hbTo);
+	if (hbTo) clearInterval(hbTo);
 	socket.connect();
 });
 
@@ -46,4 +47,14 @@ socket.on('get', (data) => {
 			console.log("Screenshot error: " + error);
 		});
 	}
+});
+
+socket.on('heartbeat', (data) => {
+	console.log("Server heartbeat")
+	if (sHbTo) clearTimeout(sHbTo);
+	sHbTo = setTimeout(function() {
+		console.log("No server heartbeat... disconnecting")
+		sHbTo = 0;
+		socket.close();
+	}, 5 * 60 * 1000);
 });
