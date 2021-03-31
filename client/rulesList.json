@@ -1,0 +1,13 @@
+[
+	{
+		"trigger": {
+			"ProcessName": "zoom",
+			"MainWindowTitle": "zoom meeting"
+		},
+		"target": {
+			"ProcessName": "chrome",
+			"MainWindowTitle": "youtube"
+		},
+		"action": "kill"
+	}
+]
