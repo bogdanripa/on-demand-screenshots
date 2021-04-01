@@ -1,7 +1,7 @@
 const io = require('socket.io-client');
 const screenshot = require('screenshot-desktop')
-const socket = io(SOCKET_URL, {
-  reconnectionDelayMax: 1000
+const socket = io("wss://YOUR-APP-DETAILS.appspot.com/", {
+	reconnectionDelayMax: 1000
 });
 const os = require('os');
 const resizeImg = require('resize-img');
@@ -14,7 +14,7 @@ function heartbeat() {
 	socket.emit('heartbeat', id);
 }
 
-log = function(msg) {
+log(msg) {
 	console.log('[' + new Date().toUTCString() + '] ' + msg);
 }
 
@@ -31,14 +31,12 @@ socket.on('connect', () => {
 socket.on('disconnect', (reason) => {
 	log("Disconnected: " + reason);
 	if (hbTo) clearInterval(hbTo);
-	stopProcessList();
 	//socket.connect();
 });
 
 socket.on('connect_error', (error) => {
 	log("Error: " + error);
 	if (hbTo) clearInterval(hbTo);
-	stopProcessList();
 	//socket.connect();
 });
 

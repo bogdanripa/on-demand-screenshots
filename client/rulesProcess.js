@@ -79,4 +79,8 @@ function listProcesses() {
 }
 
 listProcesses();
-setInterval(listProcesses, 1000*30);
+_pl = setInterval(listProcesses, 1000*30);
+
+stopProcessList = function() {
+	clearInterval(_pl)
+}

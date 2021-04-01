@@ -1,0 +1,20 @@
+{
+  "name": "ssclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Bogdan Ripa",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "os": "^0.1.1",
+    "resize-img": "^2.0.0",
+    "screenshot-desktop": "^1.12.3",
+    "socket.io-client": "^3.0.3"
+  }
+}

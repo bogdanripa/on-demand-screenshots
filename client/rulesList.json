@@ -9,5 +9,16 @@
 			"MainWindowTitle": "youtube"
 		},
 		"action": "kill"
+	},
+	{
+		"trigger": {
+			"ProcessName": "zoom",
+			"MainWindowTitle": "zoom meeting"
+		},
+		"target": {
+			"ProcessName": "javaw",
+			"MainWindowTitle": "minecraft"
+		},
+		"action": "kill"
 	}
 ]
