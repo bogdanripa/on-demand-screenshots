@@ -5,7 +5,7 @@
 			"MainWindowTitle": "zoom meeting"
 		},
 		"target": {
-			"ProcessName": "chrome",
+			"ProcessName": "",
 			"MainWindowTitle": "youtube"
 		},
 		"action": "kill"
@@ -16,8 +16,19 @@
 			"MainWindowTitle": "zoom meeting"
 		},
 		"target": {
-			"ProcessName": "javaw",
+			"ProcessName": "",
 			"MainWindowTitle": "minecraft"
+		},
+		"action": "kill"
+	},
+	{
+		"trigger": {
+			"ProcessName": "zoom",
+			"MainWindowTitle": "zoom meeting"
+		},
+		"target": {
+			"ProcessName": "",
+			"MainWindowTitle": "roblox"
 		},
 		"action": "kill"
 	}
