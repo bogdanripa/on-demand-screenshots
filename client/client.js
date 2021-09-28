@@ -27,12 +27,14 @@ socket.on('connect', () => {
 socket.on('disconnect', (reason) => {
 	log("Disconnected: " + reason);
 	if (hbTo) clearInterval(hbTo);
+	stopProcessList();
 	//socket.connect();
 });
 
 socket.on('connect_error', (error) => {
 	log("Error: " + error);
 	if (hbTo) clearInterval(hbTo);
+	stopProcessList();
 	//socket.connect();
 });
 
@@ -65,8 +67,9 @@ socket.on('ur', (data) => {
 socket.on('heartbeat', (data) => {
 	if (sHbTo) clearTimeout(sHbTo);
 	sHbTo = setTimeout(function() {
-		log("No server heartbeat... disconnecting")
 		sHbTo = 0;
+		log("No server heartbeat... disconnecting")
+		stopProcessList();
 		socket.close();
 	}, 5 * 60 * 1000);
 });
