@@ -29,7 +29,7 @@ setInterval(function() {
         }
 }, 60 * 1000);
 
-app.get('/mamaaremere', (req, res) => {
+app.get('/heloworld', (req, res) => {
         var html = '<ul>';
         for (var key in heartbeats) {
                 html += '<li><a href=/' + key + '/>' + key + '</a></li>';
@@ -40,7 +40,7 @@ app.get('/mamaaremere', (req, res) => {
         res.status(200).send(html).end();
 });
 
-app.post('/mamaaremere', (req, res) => {
+app.post('/heloworld', (req, res) => {
         io.emit("ur", req.body.rules);
 
         res.status(200).send("Sent").end();

@@ -14,14 +14,6 @@ function heartbeat() {
 	socket.emit('heartbeat', id);
 }
 
-var lastLog = '';
-log = function(msg) {
-	if (lastLog != msg) {
-		console.log('[' + new Date().toUTCString() + '] ' + msg);
-		lastLog = msg;
-	}
-}
-
 log("Init: " + id);
 
 socket.on('connect', () => {
