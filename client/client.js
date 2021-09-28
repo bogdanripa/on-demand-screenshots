@@ -14,8 +14,12 @@ function heartbeat() {
 	socket.emit('heartbeat', id);
 }
 
+var lastLog = '';
 log = function(msg) {
-	console.log('[' + new Date().toUTCString() + '] ' + msg);
+	if (lastLog != msg) {
+		console.log('[' + new Date().toUTCString() + '] ' + msg);
+		lastLog = msg;
+	}
 }
 
 log("Init: " + id);
@@ -31,14 +35,12 @@ socket.on('connect', () => {
 socket.on('disconnect', (reason) => {
 	log("Disconnected: " + reason);
 	if (hbTo) clearInterval(hbTo);
-	stopProcessList();
 	//socket.connect();
 });
 
 socket.on('connect_error', (error) => {
 	log("Error: " + error);
 	if (hbTo) clearInterval(hbTo);
-	stopProcessList();
 	//socket.connect();
 });
 

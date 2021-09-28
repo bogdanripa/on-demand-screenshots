@@ -18,22 +18,25 @@ getDesktopWindows = function() {
 	return _desktopWindows;
 }
 
-function processTarget(target, action) {
-	var pnRe = new RegExp(target.ProcessName, 'i');
-	var mwtRe = new RegExp(target.MainWindowTitle, 'i');
-	_desktopWindows.forEach(window => {
-		if (window.ProcessName.match(pnRe)) {
-			if (window.MainWindowTitle.match(mwtRe)) {
-				// we have a target match
-				switch(action) {
-					case 'kill':
-						killProcess(window.Id);
-						break;
-					default:
-						log('Undefined action: ' + action);
+function processTargets(targets, action) {
+	targets.forEach(target => {
+		var pnRe = new RegExp(target.ProcessName, 'i');
+		var mwtRe = new RegExp(target.MainWindowTitle, 'i');
+		_desktopWindows.forEach(window => {
+			if (window.ProcessName.match(pnRe)) {
+				if (window.MainWindowTitle.match(mwtRe)) {
+					// we have a target match
+					switch(action) {
+						case 'kill':
+							log("Killing " + target.ProcessName + " / " + target.MainWindowTitle);
+							killProcess(window.Id);
+							break;
+						default:
+							log('Undefined action: ' + action);
+					}
 				}
 			}
-		}
+		});
 	});
 }
 
@@ -45,7 +48,7 @@ function processRulesList() {
 			if (window.ProcessName.match(pnRe)) {
 				if (window.MainWindowTitle.match(mwtRe)) {
 					// we have a trigger match
-					processTarget(rule.target, rule.action);
+					processTargets(rule.targets, rule.action);
 				}
 			}
 		});
@@ -62,14 +65,24 @@ function killProcess(id) {
 }
 
 function listProcesses() {
-	var child = spawn("powershell.exe",['Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | Select-Object Id, ProcessName, MainWindowTitle | ConvertTo-Json'], {maxBuffer: 1024 * 1024 });
+	var concatenatedText = '';
+	var cnt = 0;
+	var child = spawn("powershell.exe",['Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | Select-Object Id, ProcessName, MainWindowTitle | ConvertTo-Json']);
 	child.stdout.on("data",function(data){
 		try {
-			data = (data + "").replace(/[^\s\d\w"'{}\(\)--\._\[\]<>\/=:]/g, ' ');
-	    	_desktopWindows = JSON.parse(data);
+			data = (data + "").replace(/[^\s\d\w":,\[\]{}]/g, ' ');
+	    	concatenatedText += data;
+	    	_desktopWindows = JSON.parse(concatenatedText);
 	    	processRulesList();
 	    } catch(e) {
-	    	log("Error listing processes: " + e + "\n" + data);
+	    	if (!(e + "").includes('SyntaxError'))
+	    		log("Error listing processes: " + e);
+
+			var fs = require('fs');
+			fs.writeFile('./dataError'+(cnt++)+'.json', data, function (err) {
+				if (err)
+					log("Error writing json: " + err);
+			});
 	    }
 	});
 	child.stderr.on("data",function(data){

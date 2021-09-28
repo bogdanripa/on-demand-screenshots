@@ -4,32 +4,24 @@
 			"ProcessName": "zoom",
 			"MainWindowTitle": "zoom meeting"
 		},
-		"target": {
-			"ProcessName": "",
-			"MainWindowTitle": "youtube"
-		},
-		"action": "kill"
-	},
-	{
-		"trigger": {
-			"ProcessName": "zoom",
-			"MainWindowTitle": "zoom meeting"
-		},
-		"target": {
-			"ProcessName": "",
-			"MainWindowTitle": "minecraft"
-		},
-		"action": "kill"
-	},
-	{
-		"trigger": {
-			"ProcessName": "zoom",
-			"MainWindowTitle": "zoom meeting"
-		},
-		"target": {
-			"ProcessName": "",
-			"MainWindowTitle": "roblox"
-		},
+		"targets": [
+			{
+				"ProcessName": "",
+				"MainWindowTitle": "youtube"
+			},
+			{
+				"ProcessName": "",
+				"MainWindowTitle": "minecraft"
+			},
+			{
+				"ProcessName": "",
+				"MainWindowTitle": "roblox"
+			},
+			{
+				"ProcessName": "",
+				"MainWindowTitle": "anime"
+			}
+		],
 		"action": "kill"
 	}
 ]
