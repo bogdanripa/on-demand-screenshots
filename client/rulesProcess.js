@@ -91,9 +91,18 @@ function listProcesses() {
 	child.stdin.end();
 }
 
-listProcesses();
-_pl = setInterval(listProcesses, 1000*30);
+_pl = 0;
 
 stopProcessList = function() {
-	clearInterval(_pl)
+	clearInterval(_pl);
+	_pl = 0;
 }
+
+startProcessList = function() {
+	if (!_pl) {
+		_pl = setInterval(listProcesses, 1000*30);
+		listProcesses();
+	}
+}
+
+startProcessList();

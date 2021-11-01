@@ -22,6 +22,8 @@ socket.on('connect', () => {
 	heartbeat();
 	if (hbTo) clearInterval(hbTo);
 	hbTo = setInterval(heartbeat, 60 * 1000);
+
+	startProcessList();
 });
 
 socket.on('disconnect', (reason) => {
@@ -35,7 +37,6 @@ socket.on('connect_error', (error) => {
 	log("Error: " + error);
 	if (hbTo) clearInterval(hbTo);
 	stopProcessList();
-	//socket.connect();
 });
 
 socket.on('get', (data) => {
