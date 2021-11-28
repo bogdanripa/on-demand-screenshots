@@ -19,6 +19,7 @@ getDesktopWindows = function() {
 }
 
 function processTargets(targets, action) {
+	log('processing...')
 	targets.forEach(target => {
 		var pnRe = new RegExp(target.ProcessName, 'i');
 		var mwtRe = new RegExp(target.MainWindowTitle, 'i');
@@ -41,17 +42,27 @@ function processTargets(targets, action) {
 }
 
 function processRulesList() {
-	rulesList.forEach(rule => {
-		var pnRe = new RegExp(rule.trigger.ProcessName, 'i');
-		var mwtRe = new RegExp(rule.trigger.MainWindowTitle, 'i');
-		_desktopWindows.forEach(window => {
-			if (window.ProcessName.match(pnRe)) {
-				if (window.MainWindowTitle.match(mwtRe)) {
-					// we have a trigger match
-					processTargets(rule.targets, rule.action);
-				}
-			}
-		});
+	rulesList.rules.forEach(rule => {
+		switch(rule.trigger.type) {
+			case 'process':
+				var pnRe = new RegExp(rule.trigger.ProcessName, 'i');
+				var mwtRe = new RegExp(rule.trigger.MainWindowTitle, 'i');
+				_desktopWindows.forEach(window => {
+					if (window.ProcessName.match(pnRe)) {
+						if (window.MainWindowTitle.match(mwtRe)) {
+							// we have a trigger match
+							processTargets(rulesList.targets[rule.target], rule.action);
+						}
+					}
+				});
+				break;
+			case 'time':
+				var h = new Date().getHours();
+				if (h < rule.trigger.startHour || h >= rule.trigger.endHour) {
+					processTargets(rulesList.targets[rule.target], rule.action);
+				}				
+				break;
+		}
 	});
 }
 

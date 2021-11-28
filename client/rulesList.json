@@ -1,10 +1,28 @@
-[
-	{
-		"trigger": {
-			"ProcessName": "zoom",
-			"MainWindowTitle": "zoom meeting"
+{
+	"rules": [
+		{
+			"trigger": {
+				"type": "process",
+				"ProcessName": "zoom",
+				"MainWindowTitle": "zoom meeting"
+			},
+			"target": "all",
+			"action": "kill"
 		},
-		"targets": [
+		{
+			"trigger": {
+				"type": "time",
+				"startHour": 8,
+				"endHour": 21,
+				"target": "all",
+				"action": "kill"
+			},
+			"target": "all",
+			"action": "kill"
+		}
+	],
+	"targets": {
+		"all": [
 			{
 				"ProcessName": "",
 				"MainWindowTitle": "youtube"
@@ -21,7 +39,6 @@
 				"ProcessName": "",
 				"MainWindowTitle": "anime"
 			}
-		],
-		"action": "kill"
+		]
 	}
-]
+}
