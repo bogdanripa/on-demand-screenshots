@@ -38,6 +38,14 @@
 			{
 				"ProcessName": "",
 				"MainWindowTitle": "anime"
+			},
+			{
+				"ProcessName": "",
+				"MainWindowTitle": "netflix"
+			},
+			{
+				"ProcessName": "",
+				"MainWindowTitle": "jackbox"
 			}
 		]
 	}
