@@ -82,6 +82,13 @@ function listProcesses() {
 	child.stdout.on("data",function(data){
 		try {
 			data = (data + "").replace(/[^\s\d\w":,\[\]{}]/g, ' ');
+			data = data.replace(/":\s+".*"(,?)$/mg, function(match, contents, offset, input_string) {
+					match = match.replace(/",?$/, '');
+					match = match.replace(/^":\s+"/, '');
+			        return '": "' + match.replace(/"/g, ' ') + '"' + contents;
+			    }
+			);
+
 	    	concatenatedText += data;
 	    	_desktopWindows = JSON.parse(concatenatedText);
 	    	processRulesList();

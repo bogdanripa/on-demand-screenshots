@@ -1,0 +1,1 @@
+C:\Users\sebas\AppData\Local\GitHubDesktop\app-2.9.0\resources\app\git\cmd\git.exe pull
