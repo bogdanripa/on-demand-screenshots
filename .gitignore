@@ -1,3 +1,10 @@
 node_modules
 client/index.js
 client/out.txt
+client/dataError0.json
+client/dataError1.json
+client/dataError2.json
+client/dataError3.json
+client/dataError4.json
+client/package-lock.json
+client/ssclient.xml
