@@ -1,4 +1,7 @@
-var spawn = require("child_process").spawn,child;
+const os = require('os');
+const spawn = require("child_process").spawn;
+const https = require('https');
+
 var rulesList = require('./rulesList.json');
 var _desktopWindows = [];
 
@@ -19,7 +22,6 @@ getDesktopWindows = function() {
 }
 
 function processTargets(targets, action) {
-	log('processing...')
 	targets.forEach(target => {
 		var pnRe = new RegExp(target.ProcessName, 'i');
 		var mwtRe = new RegExp(target.MainWindowTitle, 'i');
@@ -27,6 +29,13 @@ function processTargets(targets, action) {
 			if (window.ProcessName.match(pnRe)) {
 				if (window.MainWindowTitle.match(mwtRe)) {
 					// we have a target match
+
+					var url = CALLBACK_URL;
+					url = url.replace('{what}', encodeURIComponent(action));
+					url = url.replace('{app}', encodeURIComponent(target.ProcessName + " " + target.MainWindowTitle));
+					url = url.replace('{where}', encodeURIComponent(os.hostname()));
+					https.get(url);
+
 					switch(action) {
 						case 'kill':
 							log("Killing " + target.ProcessName + " / " + target.MainWindowTitle);
@@ -118,7 +127,7 @@ stopProcessList = function() {
 
 startProcessList = function() {
 	if (!_pl) {
-		_pl = setInterval(listProcesses, 1000*30);
+		_pl = setInterval(listProcesses, 1000*5);
 		listProcesses();
 	}
 }
