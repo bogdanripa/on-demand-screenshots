@@ -1,6 +1,7 @@
 const os = require('os');
 const spawn = require("child_process").spawn;
 const https = require('https');
+const fs = require('fs');
 
 var rulesList = require('./rulesList.json');
 var _desktopWindows = [];
@@ -8,7 +9,6 @@ var _desktopWindows = [];
 updateRules = function(newRulesTxt) {
 	try {
 		rulesList = JSON.parse(newRulesTxt);
-		var fs = require('fs');
 		fs.writeFile('./rulesList.json', newRulesTxt, function (err) {
 			if (err) throw err;
 		});
@@ -20,6 +20,23 @@ updateRules = function(newRulesTxt) {
 getDesktopWindows = function() {
 	return _desktopWindows;
 }
+
+function targetsRunning(targets) {
+	var found = false;
+	targets.forEach(target => {
+		var pnRe = new RegExp(target.ProcessName, 'i');
+		var mwtRe = new RegExp(target.MainWindowTitle, 'i');
+		_desktopWindows.forEach(window => {
+			if (window.ProcessName.match(pnRe)) {
+				if (window.MainWindowTitle.match(mwtRe)) {
+					 found = true;
+				}
+			}
+		});
+	});
+	return found;
+}
+
 
 function processTargets(targets, action) {
 	targets.forEach(target => {
@@ -65,16 +82,22 @@ function processRulesList() {
 					}
 				});
 				break;
-			case 'time':
+			case 'interval':
 				var h = new Date().getHours();
 				if (h < rule.trigger.startHour || h >= rule.trigger.endHour) {
 					processTargets(rulesList.targets[rule.target], rule.action);
 				}				
 				break;
+			case 'time':
+				if (targetsRunning(rulesList.targets[rule.target])) {
+					if (addTime()/60 >= rule.trigger.minutes) {
+						processTargets(rulesList.targets[rule.target], rule.action);
+					}
+				}
+				break;
 		}
 	});
 }
-
 
 function killProcess(id) {
 	var child = spawn("powershell.exe",["Stop-Process -Id " + id]);
@@ -125,11 +148,33 @@ stopProcessList = function() {
 	_pl = 0;
 }
 
+REFRESH_RATE = 5;
 startProcessList = function() {
 	if (!_pl) {
-		_pl = setInterval(listProcesses, 1000*5);
+		_pl = setInterval(listProcesses, 1000 * REFRESH_RATE);
 		listProcesses();
 	}
 }
 
 startProcessList();
+
+addTime = function() {
+
+	var timeJson;
+	try {
+		timeJson = JSON.parse(fs.readFileSync('time.json'));
+	} catch(e) {
+		timeJson = {date:'', time:0};
+	}
+
+	var today = new Date().toISOString().slice(0, 10);
+	if (timeJson.date != today) {
+		timeJson.date = today;
+		timeJson.time = 0;
+	}
+	timeJson.time += REFRESH_RATE;
+
+	fs.writeFileSync('time.json', JSON.stringify(timeJson));
+
+	return timeJson.time;
+}
