@@ -10,6 +10,7 @@
   "author": "Bogdan Ripa",
   "license": "ISC",
   "dependencies": {
+    "@josephuspaye/list-open-windows": "^0.1.1",
     "bufferutil": "^4.0.3",
     "child_process": "^1.0.2",
     "express": "^4.17.1",

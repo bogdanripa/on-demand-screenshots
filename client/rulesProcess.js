@@ -1,5 +1,6 @@
 const os = require('os');
 const spawn = require("child_process").spawn;
+const { listOpenWindows } = require('@josephuspaye/list-open-windows');
 const https = require('https');
 const fs = require('fs');
 
@@ -27,8 +28,8 @@ function targetsRunning(targets) {
 		var pnRe = new RegExp(target.ProcessName, 'i');
 		var mwtRe = new RegExp(target.MainWindowTitle, 'i');
 		_desktopWindows.forEach(window => {
-			if (window.ProcessName.match(pnRe)) {
-				if (window.MainWindowTitle.match(mwtRe)) {
+			if (window.processPath.match(pnRe)) {
+				if (window.caption.match(mwtRe)) {
 					 found = true;
 				}
 			}
@@ -43,8 +44,8 @@ function processTargets(targets, action) {
 		var pnRe = new RegExp(target.ProcessName, 'i');
 		var mwtRe = new RegExp(target.MainWindowTitle, 'i');
 		_desktopWindows.forEach(window => {
-			if (window.ProcessName.match(pnRe)) {
-				if (window.MainWindowTitle.match(mwtRe)) {
+			if (window.processPath.match(pnRe)) {
+				if (window.caption.match(mwtRe)) {
 					// we have a target match
 
 					var url = CALLBACK_URL;
@@ -56,7 +57,7 @@ function processTargets(targets, action) {
 					switch(action) {
 						case 'kill':
 							log("Killing " + target.ProcessName + " / " + target.MainWindowTitle);
-							killProcess(window.Id);
+							killProcess(window.processId);
 							break;
 						default:
 							log('Undefined action: ' + action);
@@ -74,8 +75,8 @@ function processRulesList() {
 				var pnRe = new RegExp(rule.trigger.ProcessName, 'i');
 				var mwtRe = new RegExp(rule.trigger.MainWindowTitle, 'i');
 				_desktopWindows.forEach(window => {
-					if (window.ProcessName.match(pnRe)) {
-						if (window.MainWindowTitle.match(mwtRe)) {
+					if (window.processPath.match(pnRe)) {
+						if (window.caption.match(mwtRe)) {
 							// we have a trigger match
 							processTargets(rulesList.targets[rule.target], rule.action);
 						}
@@ -110,35 +111,8 @@ function killProcess(id) {
 function listProcesses() {
 	var concatenatedText = '';
 	var cnt = 0;
-	var child = spawn("powershell.exe",['Get-Process | Where-Object {$_.MainWindowTitle -ne ""} | Select-Object Id, ProcessName, MainWindowTitle | ConvertTo-Json']);
-	child.stdout.on("data",function(data){
-		try {
-			data = (data + "").replace(/[^\s\d\w":,\[\]{}]/g, ' ');
-			data = data.replace(/":\s+".*"(,?)$/mg, function(match, contents, offset, input_string) {
-					match = match.replace(/",?$/, '');
-					match = match.replace(/^":\s+"/, '');
-			        return '": "' + match.replace(/"/g, ' ') + '"' + contents;
-			    }
-			);
-
-	    	concatenatedText += data;
-	    	_desktopWindows = JSON.parse(concatenatedText);
-	    	processRulesList();
-	    } catch(e) {
-	    	if (!(e + "").includes('SyntaxError'))
-	    		log("Error listing processes: " + e);
-
-			var fs = require('fs');
-			fs.writeFile('./dataError'+(cnt++)+'.json', data, function (err) {
-				if (err)
-					log("Error writing json: " + err);
-			});
-	    }
-	});
-	child.stderr.on("data",function(data){
-	    log("Powershell Errors: " + data);
-	});
-	child.stdin.end();
+	_desktopWindows = listOpenWindows();
+	processRulesList();
 }
 
 _pl = 0;
