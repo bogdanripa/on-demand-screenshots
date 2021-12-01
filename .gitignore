@@ -9,5 +9,4 @@ client/package-lock.json
 client/ssclient.xml
 client/index.js
 client/out.txt
-client/package-lock.json
 pull.bat
