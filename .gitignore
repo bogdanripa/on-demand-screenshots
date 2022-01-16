@@ -1,5 +1,5 @@
-client/node-modules/**
-server/node-modules/**
+client/node_modules/**
+server/node_modules/**
 client/dataError?.json
 client/package-lock.json
 client/ssclient.xml
