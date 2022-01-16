@@ -1,10 +1,6 @@
-client/node-modules
-server/node-modules
-client/dataError0.json
-client/dataError1.json
-client/dataError2.json
-client/dataError3.json
-client/dataError4.json
+client/node-modules/**
+server/node-modules/**
+client/dataError?.json
 client/package-lock.json
 client/ssclient.xml
 client/index.js
