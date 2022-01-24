@@ -6,16 +6,14 @@
 				"ProcessName": "zoom",
 				"MainWindowTitle": "zoom meeting"
 			},
-			"target": "all",
+			"target": "games",
 			"action": "kill"
 		},
 		{
 			"trigger": {
 				"type": "interval",
-				"startHour": 8,
-				"endHour": 21,
-				"target": "all",
-				"action": "kill"
+				"startHour": 21,
+				"endHour": 7
 			},
 			"target": "all",
 			"action": "kill"
@@ -23,16 +21,14 @@
 		{
 			"trigger": {
 				"type": "time",
-				"minutes": 60,
-				"target": "all",
-				"action": "kill"
+				"minutes": 60
 			},
-			"target": "all",
+			"target": "games",
 			"action": "kill"
 		}
 	],
 	"targets": {
-		"all": [
+		"games": [
 			{
 				"ProcessName": "",
 				"MainWindowTitle": "youtube"
@@ -60,6 +56,12 @@
 			{
 				"ProcessName": "",
 				"MainWindowTitle": "subbed online free"
+			}
+		],
+		"all": [
+			{
+				"ProcessName": "",
+				"MainWindowTitle": ""
 			}
 		]
 	}

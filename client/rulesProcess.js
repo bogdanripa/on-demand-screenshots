@@ -85,9 +85,9 @@ function processRulesList() {
 				break;
 			case 'interval':
 				var h = new Date().getHours();
-				if (h < rule.trigger.startHour || h >= rule.trigger.endHour) {
+				if (h >= rule.trigger.endHour || h < rule.trigger.startHour) {
 					processTargets(rulesList.targets[rule.target], rule.action);
-				}				
+				}
 				break;
 			case 'time':
 				if (targetsRunning(rulesList.targets[rule.target])) {
