@@ -11,15 +11,6 @@
 		},
 		{
 			"trigger": {
-				"type": "interval",
-				"startHour": 21,
-				"endHour": 7
-			},
-			"target": "all",
-			"action": "kill"
-		},
-		{
-			"trigger": {
 				"type": "time",
 				"minutes": 60
 			},
