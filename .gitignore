@@ -4,4 +4,12 @@ client/dataError?.json
 client/package-lock.json
 client/ssclient.xml
 client/index.js
+<<<<<<< Updated upstream
 client/out.txt
+=======
+client/out.txt
+pull.bat
+client/time.json
+package-lock.json
+pull.bat
+>>>>>>> Stashed changes
